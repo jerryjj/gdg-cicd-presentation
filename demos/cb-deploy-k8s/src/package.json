@@ -1,0 +1,19 @@
+{
+  "name": "simple-demo-app",
+  "version": "1.0.0",
+  "description": "simple demo app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "test": "mocha test --exit"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "express": "^4.17.1",
+    "mocha": "^7.0.1",
+    "supertest": "^4.0.2"
+  },
+  "devDependencies": {}
+}

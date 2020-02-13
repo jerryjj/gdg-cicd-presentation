@@ -1,0 +1,33 @@
+steps:
+  # # Install npm dependencies
+  # - name: 'gcr.io/cloud-builders/npm'
+  #   args: ['install']
+  #   dir: src
+  # # Run tests
+  # - name: 'gcr.io/cloud-builders/npm'
+  #   args: ['test']
+  #   dir: src
+  # Build the container with Kaniko and push to registry
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    args:
+      - --destination=eu.gcr.io/$PROJECT_ID/run-demo:$SHORT_SHA
+      - --cache=true
+      - --cache-ttl=1h
+  # Deploy to cloud run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+    - 'run'
+    - 'deploy'
+    - 'deploy-demo'
+    - '--project'
+    - '$_DEPLOY_PROJECT'
+    - '--image'
+    - 'eu.gcr.io/$PROJECT_ID/run-demo:$SHORT_SHA'
+    - '--region'
+    - '$_RUN_REGION'
+    - '--platform'
+    - 'managed'
+    - '--allow-unauthenticated'
+    env:
+      - '_DEPLOY_PROJECT=$_DEPLOY_PROJECT'
+      - '_RUN_REGION=$_RUN_REGION'

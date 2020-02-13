@@ -1,0 +1,14 @@
+USR=$(whoami)
+export SETUP_DIR=$(pwd)
+
+export DEPLOY_PROJECT_ID=$USR-cicd-demo-deploy
+export BUILD_PROJECT_ID=$USR-cicd-demo-build
+
+export COMPUTE_ZONE=europe-north1-a
+export COMPUTE_REGION=$(echo $COMPUTE_ZONE | cut -d - -f 1,2)
+
+echo -e "Prepared environment variables for setup, using following variables\n"
+echo -e " DEPLOY_PROJECT_ID: $DEPLOY_PROJECT_ID"
+echo -e " BUILD_PROJECT_ID: $BUILD_PROJECT_ID"
+echo -e " COMPUTE_REGION: $COMPUTE_REGION"
+echo -e " COMPUTE_ZONE: $COMPUTE_ZONE"

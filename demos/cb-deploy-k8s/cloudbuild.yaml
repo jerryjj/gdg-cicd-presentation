@@ -1,0 +1,28 @@
+steps:
+  # # Install npm dependencies
+  # - name: 'gcr.io/cloud-builders/npm'
+  #   args: ['install']
+  #   dir: src
+  # # Run tests
+  # - name: 'gcr.io/cloud-builders/npm'
+  #   args: ['test']
+  #   dir: src
+  # Build the container image WITHOUT CACHE
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'eu.gcr.io/$PROJECT_ID/k8s-demo:$SHORT_SHA', '.' ]
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'eu.gcr.io/$PROJECT_ID/k8s-demo:$SHORT_SHA']
+  # Deploy to GKE
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+    - "--namespace=default"
+    - set
+    - image
+    - deployment
+    - demo-deploy
+    - service=eu.gcr.io/$PROJECT_ID/k8s-demo:$SHORT_SHA
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=$_K8S_ZONE'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=demo-cluster'
+      - 'CLOUDSDK_CORE_PROJECT=$_DEPLOY_PROJECT'

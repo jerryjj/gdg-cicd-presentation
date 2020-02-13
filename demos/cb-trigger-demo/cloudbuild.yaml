@@ -1,0 +1,16 @@
+steps:
+  # Install npm dependencies
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+    dir: src
+  # Run tests
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['test']
+    dir: src
+  # Build the container image WITHOUT CACHE
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'eu.gcr.io/$PROJECT_ID/trigger-demo:$SHORT_SHA', '.' ]
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'eu.gcr.io/$PROJECT_ID/trigger-demo:$SHORT_SHA']
+images: ['eu.gcr.io/$PROJECT_ID/trigger-demo:$SHORT_SHA']
